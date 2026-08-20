@@ -1,0 +1,13 @@
+{
+  "name": "India Insight Lab",
+  "short_name": "India Insight Lab",
+  "description": "Census, SRS, NFHS and PLFS data turned into charts and articles about India.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF9F7",
+  "theme_color": "#B3661D",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
