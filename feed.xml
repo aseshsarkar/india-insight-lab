@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>India Insight Lab</title>
+    <link>https://indiainsightlab.com/</link>
+    <description>Census, SRS, NFHS and PLFS data turned into charts and maps that show the real shape of change across India.</description>
+    <language>en-IN</language>
+    <atom:link href="https://indiainsightlab.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Fri, 21 Aug 2026 09:00:00 +0530</lastBuildDate>
+    <item>
+      <title>India’s Human Development Index recovered to 0.685 in 2023, after two rare years of decline.</title>
+      <link>https://indiainsightlab.com/insights</link>
+      <guid isPermaLink="false">iil-insight-17-Aug-2026</guid>
+      <category>Human development &amp; wellbeing</category>
+      <pubDate>Mon, 17 Aug 2026 09:00:00 +0530</pubDate>
+      <description>The pandemic-era fall was driven by falling life expectancy — one of the few times the global HDI has dropped since 1990. India now ranks 130th of 193 countries, just below the threshold for ‘high’ human development.</description>
+    </item>
+    <item>
+      <title>The SDG India Index composite score reached 71, up from a 57-point baseline in 2018.</title>
+      <link>https://indiainsightlab.com/insights</link>
+      <guid isPermaLink="false">iil-insight-12-Jul-2026</guid>
+      <category>Governance &amp; safety</category>
+      <pubDate>Sun, 12 Jul 2026 09:00:00 +0530</pubDate>
+      <description>Climate Action and No Poverty saw the largest gains of any goal since 2020–21; Reduced Inequalities was the only goal to fall.</description>
+    </item>
+    <item>
+      <title>India ranked 126th of 143 countries in the 2024 World Happiness Report.</title>
+      <link>https://indiainsightlab.com/insights</link>
+      <guid isPermaLink="false">iil-insight-20-Mar-2026</guid>
+      <category>Human development &amp; wellbeing</category>
+      <pubDate>Fri, 20 Mar 2026 09:00:00 +0530</pubDate>
+      <description>Every major neighbour except Bangladesh and Sri Lanka ranked higher, including China by 66 places. India improved to 118th of 147 countries in the 2025 edition.</description>
+    </item>
+    <item>
+      <title>UPI passed 200 billion transactions in a single year, eight years after launch.</title>
+      <link>https://indiainsightlab.com/insights</link>
+      <guid isPermaLink="false">iil-insight-28-Feb-2026</guid>
+      <category>Digital &amp; internet access</category>
+      <pubDate>Sat, 28 Feb 2026 09:00:00 +0530</pubDate>
+      <description>That makes it the largest real-time retail payments system in the world by transaction count, even as the average ticket size keeps falling.</description>
+    </item>
+    <item>
+      <title>Female labour force participation has risen sharply since 2018 — mostly in unpaid family work.</title>
+      <link>https://indiainsightlab.com/insights</link>
+      <guid isPermaLink="false">iil-insight-15-Feb-2026</guid>
+      <category>Employment &amp; labour</category>
+      <pubDate>Sun, 15 Feb 2026 09:00:00 +0530</pubDate>
+      <description>The PLFS usual-status rate is up double digits, but salaried employment for women has barely moved. The headline number and the underlying quality of work are telling different stories.</description>
+    </item>
+    <item>
+      <title>India’s under-five mortality rate has fallen by more than half since 2000.</title>
+      <link>https://indiainsightlab.com/insights</link>
+      <guid isPermaLink="false">iil-insight-03-Feb-2026</guid>
+      <category>Health &amp; nutrition</category>
+      <pubDate>Tue, 03 Feb 2026 09:00:00 +0530</pubDate>
+      <description>The decline is steepest in states that expanded institutional delivery fastest after 2015 — but India still accounts for roughly a fifth of the world’s under-five deaths.</description>
+    </item>
+    <item>
+      <title>Report: The State of India 2026</title>
+      <link>https://indiainsightlab.com/reports-pdf/state-of-india-2026.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/state-of-india-2026.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>The full-year synthesis across every indicator India Insight Lab tracks. Free PDF download.</description>
+    </item>
+    <item>
+      <title>Report: Understanding Urban India</title>
+      <link>https://indiainsightlab.com/reports-pdf/urban-india.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/urban-india.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>Population density, housing, transport, air quality and energy in India’s cities. Free PDF download.</description>
+    </item>
+    <item>
+      <title>Report: India’s Demographic Transition</title>
+      <link>https://indiainsightlab.com/reports-pdf/demographic-transition.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/demographic-transition.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>Fertility, mortality, age structure and labour force through the decades that reshaped India. Free PDF download.</description>
+    </item>
+    <item>
+      <title>Report: India’s Climate and Environmental Transition</title>
+      <link>https://indiainsightlab.com/reports-pdf/climate-environment.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/climate-environment.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>Emissions, air quality, the energy transition and the agricultural pressures behind them. Free PDF download.</description>
+    </item>
+    <item>
+      <title>Report: India’s Employment and Economy</title>
+      <link>https://indiainsightlab.com/reports-pdf/economy-employment.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/economy-employment.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>Growth, jobs, incomes and the digital economy, cross-read against poverty trends. Free PDF download.</description>
+    </item>
+    <item>
+      <title>Report: India’s Health Landscape</title>
+      <link>https://indiainsightlab.com/reports-pdf/health-landscape.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/health-landscape.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>Mortality, nutrition, human development and the gender gaps that run through all three. Free PDF download.</description>
+    </item>
+    <item>
+      <title>Report: Future India 2050</title>
+      <link>https://indiainsightlab.com/reports-pdf/future-india-2050.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/future-india-2050.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>Where the trend lines point — using only the projected series the primary sources publish. Free PDF download.</description>
+    </item>
+    <item>
+      <title>Report: State Data Profile — Maharashtra</title>
+      <link>https://indiainsightlab.com/reports-pdf/maharashtra-profile.pdf</link>
+      <guid isPermaLink="true">https://indiainsightlab.com/reports-pdf/maharashtra-profile.pdf</guid>
+      <category>Reports</category>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 +0530</pubDate>
+      <description>A sample state profile following the standard India Insight Lab structure. Free PDF download.</description>
+    </item>
+  </channel>
+</rss>
