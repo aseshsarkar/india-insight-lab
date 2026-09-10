@@ -1,0 +1,576 @@
+<title>Flow, Chord & Ridgeline</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#FAF9F7; --card:#FFFFFF; --ink:#3A3730; --muted:#85827B; --faint:#B5B0A5;
+    --border:#DDDDD8; --border-soft:#E9E6DF;
+    --rural:#4A7356; --rural-soft:#E4EBE1;
+    --urban:#B3661D; --urban-soft:#F3E5D3;
+    --chord:#B3661D; --chord-track:#EFEAE0;
+    --c1:#4F78A6; --c2:#DF575B; --c3:#5BA050; --c4:#EBC94D; --c5:#E8A0B8; --c6:#79B6B1; --c7:#9B7560; --c8:#F18E30;
+    --c9:#8B6FA0; --c10:#A8A29A; --c11:#5C86AC;
+    --hub:#8F8A7E;
+    --ridge-1:#F6E9D3; --ridge-2:#E4C08C; --ridge-3:#C2924F; --ridge-4:#8A5A22;
+    --ridge2-1:#E3ECE0; --ridge2-2:#AFC6A8; --ridge2-3:#749A78; --ridge2-4:#3E6449;
+    --code-bg:#F1EFE9;
+    --stat-bg:#F3F1EA;
+    --shadow: 0 1px 2px rgba(60,50,30,0.05), 0 6px 20px -12px rgba(60,50,30,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1B1916; --card:#242119; --ink:#EDE8DE; --muted:#A9A296; --faint:#6B6559;
+      --border:#3B372E; --border-soft:#322F27;
+      --rural:#7FA989; --rural-soft:#28322A;
+      --urban:#E0965A; --urban-soft:#3A2C1B;
+      --chord:#E0965A; --chord-track:#3A362C;
+      --c1:#6FA0D6; --c2:#F07579; --c3:#7BC470; --c4:#F0D670; --c5:#F0B8CC; --c6:#96D4CE; --c7:#BA9580; --c8:#F5A855;
+      --c9:#AB8FC0; --c10:#C8C2B8; --c11:#7CA6CC;
+      --hub:#A9A296;
+      --ridge-1:#3A331F; --ridge-2:#5C4726; --ridge-3:#8A6A34; --ridge-4:#C79753;
+      --ridge2-1:#232B24; --ridge2-2:#33452F; --ridge2-3:#4C6B48; --ridge2-4:#7EA579;
+      --code-bg:#201D16;
+      --stat-bg:#2A261D;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B1916; --card:#242119; --ink:#EDE8DE; --muted:#A9A296; --faint:#6B6559;
+    --border:#3B372E; --border-soft:#322F27;
+    --rural:#7FA989; --rural-soft:#28322A;
+    --urban:#E0965A; --urban-soft:#3A2C1B;
+    --chord:#E0965A; --chord-track:#3A362C;
+    --c1:#6FA0D6; --c2:#F07579; --c3:#7BC470; --c4:#F0D670; --c5:#F0B8CC; --c6:#96D4CE; --c7:#BA9580; --c8:#F5A855;
+    --c9:#AB8FC0; --c10:#C8C2B8; --c11:#7CA6CC;
+    --hub:#A9A296;
+    --ridge-1:#3A331F; --ridge-2:#5C4726; --ridge-3:#8A6A34; --ridge-4:#C79753;
+    --ridge2-1:#232B24; --ridge2-2:#33452F; --ridge2-3:#4C6B48; --ridge2-4:#7EA579;
+    --code-bg:#201D16;
+    --stat-bg:#2A261D;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -14px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;}
+  .wrap{max-width:880px; margin:0 auto; padding-block:56px 80px;}
+
+  .mono-tag{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.09em; text-transform:uppercase;}
+
+  header.intro{padding-bottom:36px; border-bottom:1px solid var(--border);}
+  header.intro .eyebrow{color:var(--muted); margin:0 0 14px;}
+  header.intro h1{font-size:clamp(26px,4vw,34px); line-height:1.18; margin:0 0 14px; font-weight:600; letter-spacing:-0.01em; text-wrap:balance; max-width:20ch;}
+  header.intro p{font-size:15.5px; line-height:1.62; color:var(--muted); max-width:62ch; margin:0 0 10px;}
+  header.intro p:last-child{margin-bottom:0;}
+  header.intro strong{color:var(--ink); font-weight:600;}
+
+  section.block{margin-top:44px;}
+  section.block > .block-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:14px; flex-wrap:wrap;}
+  section.block > .block-head h2{font-size:18px; font-weight:600; margin:0; letter-spacing:-0.005em;}
+  section.block > .block-head .note{color:var(--faint); font-size:12.5px;}
+
+  .card{background:var(--card); border:1px solid var(--border); border-radius:3px; box-shadow:var(--shadow); overflow:hidden;}
+  .card-head{padding:20px 24px 16px; border-bottom:1px solid var(--border-soft);}
+  .badge-row{display:flex; align-items:center; gap:10px; margin-bottom:11px; flex-wrap:wrap;}
+  .badge{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 8px; border:1px solid; border-radius:2px;}
+  .badge.demo{border-color:var(--faint); color:var(--muted); background:transparent;}
+  .card-head h3{font-size:16.5px; font-weight:600; margin:0 0 5px; letter-spacing:-0.005em;}
+  .card-head .subtitle{font-size:13.5px; color:var(--muted); line-height:1.5; margin:0; max-width:56ch;}
+  .card-chart{padding:22px 24px 8px; display:flex; justify-content:center;}
+  .card-chart svg{width:100%; height:auto; max-width:100%; overflow:visible;}
+  .card-foot{padding:12px 24px 18px; display:flex; flex-wrap:wrap; gap:6px 18px; align-items:center;}
+  .card-foot .meta{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.03em; color:var(--faint);}
+  .card-foot .meta b{color:var(--muted); font-weight:500;}
+  .card-note{margin:0; padding:13px 24px 19px; font-size:12.5px; line-height:1.6; color:var(--muted); border-top:1px dashed var(--border-soft); background:var(--code-bg);}
+
+  svg text{font-family:'IBM Plex Sans',sans-serif; fill:var(--ink);}
+  svg .num{font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums;}
+  svg .lbl{font-size:12px; fill:var(--muted);}
+  svg .lbl-strong{font-size:12px; fill:var(--ink); font-weight:500;}
+  svg .axis-line{stroke:var(--border); stroke-width:1;}
+  svg .tick{font-size:10px; fill:var(--faint); font-family:'IBM Plex Mono',monospace;}
+
+  table.map-table{width:100%; border-collapse:collapse; font-size:13px;}
+  table.map-table th{text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); font-weight:500; padding:10px 14px; border-bottom:1px solid var(--border);}
+  table.map-table td{padding:12px 14px; border-bottom:1px solid var(--border-soft); vertical-align:top; line-height:1.5;}
+  table.map-table tr:last-child td{border-bottom:none;}
+  table.map-table td.ind{font-weight:500;}
+  table.map-table td.ind .topic{display:block; font-size:11px; color:var(--muted); font-weight:400; margin-top:2px;}
+  .chip{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.04em; padding:2px 7px; border-radius:2px; white-space:nowrap;}
+  .chip.sankey{background:var(--rural-soft); color:var(--rural);}
+  .chip.chord{background:var(--urban-soft); color:var(--urban);}
+  .chip.ridge{background:var(--urban-soft); color:var(--ridge-4);}
+  .status{font-size:11px; color:var(--faint);}
+  .status.ready{color:var(--rural);}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:3px; background:var(--card); box-shadow:var(--shadow);}
+  .table-wrap table{margin:0;}
+  .table-wrap th:first-child, .table-wrap td:first-child{padding-left:18px;}
+  .table-wrap th:last-child, .table-wrap td:last-child{padding-right:18px;}
+
+  .legend{display:flex; flex-wrap:wrap; gap:8px 16px; justify-content:center; padding:2px 24px 18px; font-size:11.5px; color:var(--muted);}
+  .legend .item{display:flex; align-items:center; gap:6px; white-space:nowrap;}
+  .legend .sw{width:9px; height:9px; border-radius:2px; flex:none;}
+  .legend .item.hub .sw{border-radius:50%;}
+
+  .stat-strip{display:flex; flex-wrap:wrap; gap:1px; background:var(--border-soft); border:1px solid var(--border); border-radius:3px; overflow:hidden; margin-bottom:14px;}
+  .stat{flex:1 1 140px; background:var(--stat-bg); padding:12px 16px;}
+  .stat .v{font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:-0.01em;}
+  .stat .k{font-size:11px; color:var(--muted); margin-top:3px; line-height:1.4;}
+
+  .two-up{display:grid; grid-template-columns:1fr; gap:18px;}
+  @media (min-width:720px){ .two-up.split{grid-template-columns:1fr 1fr;} }
+  .mini-card .card-head{padding:16px 18px 12px;}
+  .mini-card .card-chart{padding:14px 18px 6px;}
+  .mini-card .card-foot{padding:10px 18px 14px;}
+  .mini-card .card-head h3{font-size:14.5px;}
+  .mini-card .card-head .subtitle{font-size:12.5px;}
+
+  footer.close{margin-top:52px; padding-top:22px; border-top:1px solid var(--border);}
+  footer.close p{font-size:13px; color:var(--muted); line-height:1.65; max-width:62ch; margin:0 0 8px;}
+  footer.close p:last-child{margin-bottom:0;}
+
+  @media (max-width:600px){
+    .card-head, .card-chart, .card-foot{padding-left:16px; padding-right:16px;}
+    .card-note{padding-left:16px; padding-right:16px;}
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="intro">
+    <p class="eyebrow mono-tag">India Insight Lab · Insights tab · revision 2 — checked against the live site</p>
+    <h1>Flow, relationship and distribution charts for the Insights tab</h1>
+    <p>Three chart types the current Insights feed doesn't have yet, each built to match the existing card system (same border, badge and footer conventions as the indicator cards already on the site) and rendered as plain inline SVG — no charting library, consistent with how the rest of the app draws its waterfall, dimension and score-history charts.</p>
+    <p>This revision replaces guessed numbers with real ones: I opened indiainsightlab.com in a browser and read each indicator's actual chart tab before claiming it was "ready." Several indicators I'd assumed were state-by-state turned out to be national-only on the Chart tab (<code>lfprPanels</code>, <code>literacy</code>, <code>povertyLines</code>, <code>mpce</code>, <code>sexRatioBirth</code> among them) — those are marked below as not fitting, honestly, rather than mocked up anyway. Only two indicators below now carry real, verified figures; the chord still stands on illustrative numbers because the underlying state-pair data doesn't exist yet in the catalog at all.</p>
+  </header>
+
+  <div class="stat-strip" style="margin-top:22px;">
+    <div class="stat"><div class="v">1</div><div class="k">indicator confirmed Sankey-ready, real data</div></div>
+    <div class="stat"><div class="v">2</div><div class="k">real state distributions, ridgeline-ready</div></div>
+    <div class="stat"><div class="v">6</div><div class="k">indicators checked live and found <em>not</em> to fit</div></div>
+    <div class="stat"><div class="v">89</div><div class="k">indicators in the full catalog, for scale</div></div>
+  </div>
+
+  <!-- SANKEY -->
+  <section class="block" id="sankey-block">
+    <div class="block-head">
+      <h2>1. Sankey — origin → destination streams</h2>
+      <span class="note">best fit: indicators already shaped as a breakdown between two categories</span>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="badge-row">
+          <span class="badge demo" style="border-color:var(--rural); color:var(--rural);">Population &amp; demography</span>
+          <span class="badge" style="border-color:var(--rural); color:var(--rural);">Verified — pulled live from indiainsightlab.com</span>
+        </div>
+        <h3>Internal migration streams</h3>
+        <p class="subtitle">India's internal migrants by origin → destination stream.</p>
+      </div>
+      <div class="stat-strip" style="margin:16px 24px 0;">
+        <div class="stat"><div class="v">54%</div><div class="k">of moves are rural-to-rural</div></div>
+        <div class="stat"><div class="v">20%</div><div class="k">rural-to-urban — the "growth story" stream</div></div>
+        <div class="stat"><div class="v">18% / 8%</div><div class="k">urban-to-urban / urban-to-rural</div></div>
+      </div>
+      <div class="card-chart"><div id="sankeySvg"></div></div>
+      <div class="card-foot">
+        <span class="meta"><b>Source</b> Census of India, D-series migration tables</span>
+        <span class="meta"><b>Coverage</b> 2011</span>
+        <span class="meta"><b>Res</b> National</span>
+      </div>
+      <p class="card-note">Today this indicator (<code>migration</code>) renders as four "ranked bars" on the live site. A Sankey reads the same four numbers as one shape: rural-to-rural — mostly marriage-related moves by women — is the thickest stream, and rural-to-urban labour migration, the stream most associated with India's growth story, is visibly the second-largest, not the biggest. These figures (54% / 20% / 18% / 8%) are the exact numbers currently live on indiainsightlab.com — checked in-browser, not estimated.</p>
+    </div>
+  </section>
+
+  <!-- CHORD -->
+  <section class="block" id="chord-block">
+    <div class="block-head">
+      <h2>2. Chord — state-to-state corridors</h2>
+      <span class="note">best fit: many-to-many relationships between states</span>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="badge-row">
+          <span class="badge demo" style="border-color:var(--urban); color:var(--urban);">Employment &amp; labour</span>
+          <span class="badge demo">Prototype · illustrative data</span>
+        </div>
+        <h3>Top inter-state labour migration corridors</h3>
+        <p class="subtitle">Relative size of India's best-documented state-to-state labour migration corridors.</p>
+      </div>
+      <div class="stat-strip" style="margin:16px 24px 0;">
+        <div class="stat"><div class="v">12</div><div class="k">corridors tracked in this mock-up</div></div>
+        <div class="stat"><div class="v">8</div><div class="k">source states, each its own colour</div></div>
+        <div class="stat"><div class="v">3</div><div class="k">destination hubs — Delhi, Mumbai region, Gujarat</div></div>
+      </div>
+      <div class="card-chart"><div id="chordSvg"></div></div>
+      <div class="legend" id="chordLegend"></div>
+      <div class="card-foot">
+        <span class="meta"><b>Source</b> illustrative, sized to Census/NSSO corridor studies</span>
+        <span class="meta"><b>Coverage</b> representative</span>
+        <span class="meta"><b>Res</b> State</span>
+      </div>
+      <p class="card-note">The Employment &amp; labour topic description already promises "migration corridors" — nothing on the site delivers on that yet. A chord is the right shape for it, but it needs a state × state origin-destination matrix, which isn't in the current dataset (only national stream shares are); ribbon widths and opacity here are illustrative, standing in for that matrix. Colour: the 11 hues (one per node, sources and hubs alike) are sampled directly from the investor Sankey you shared — the same dusty blue, brick red, sage green, gold, teal, brown and orange family, not the brighter flat-UI palette this started with. This departs from the site's muted 6-colour topic-accent palette, which isn't built for 11-way identification. Every ribbon is also directly labelled at both ends, so identification never depends on colour alone.</p>
+    </div>
+  </section>
+
+  <!-- RIDGELINE -->
+  <section class="block" id="ridge-block">
+    <div class="block-head">
+      <h2>3. Ridgeline — one shape per state distribution</h2>
+      <span class="note">best fit today: a single-year state ranking, read as a shape instead of a list</span>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="badge-row">
+          <span class="badge" style="border-color:var(--urban); color:var(--urban);">Verified — pulled live from indiainsightlab.com</span>
+        </div>
+        <h3>Two state rankings, redrawn as distributions</h3>
+        <p class="subtitle">Real state-by-state figures for <code>povertyStates</code> and <code>literacyStates</code> — each currently a "ranked bars" list on the live site.</p>
+      </div>
+      <div class="stat-strip" style="margin:16px 24px 0;">
+        <div class="stat"><div class="v">28</div><div class="k">states, multidimensional poverty (NFHS-5)</div></div>
+        <div class="stat"><div class="v">33</div><div class="k">states/UTs, literacy rate (Census 2011)</div></div>
+        <div class="stat"><div class="v">1 yr each</div><div class="k">both are single-year snapshots, not time series</div></div>
+      </div>
+      <div class="card-chart"><div id="ridgeSvg"></div></div>
+      <div class="card-foot">
+        <span class="meta"><b>Sources</b> NITI Aayog National MPI (2023) · Census of India 2011</span>
+        <span class="meta"><b>Res</b> State</span>
+      </div>
+      <p class="card-note">Correction from the first draft: neither of these indicators has more than one year of state-level data on the Chart tab, so this is <em>not</em> the "distribution sliding over years" story I originally mocked up for <code>lfprPanels</code> — that indicator turned out to be 4 national metrics, not 20 states, and has been dropped from this page. What a ridgeline still does well here, even for one year: a ranked bar list of 28–33 states makes you scroll and read; this shape shows the whole distribution at once — where Bihar and Jharkhand sit as a real tail on poverty, where Kerala sits as a real outlier on literacy. Every value plotted is the exact number currently live on the site.</p>
+    </div>
+  </section>
+
+  <!-- MAPPING TABLE -->
+  <section class="block" id="map-block">
+    <div class="block-head">
+      <h2>Where else these fit in the current catalog</h2>
+      <span class="note">quick pass over indicator.js — not exhaustive</span>
+    </div>
+    <div class="table-wrap">
+      <table class="map-table">
+        <thead>
+          <tr><th>Indicator</th><th>Chart</th><th>Why</th><th>Data status</th></tr>
+        </thead>
+        <tbody id="mapRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="close">
+    <p>Everything above is hand-rolled SVG driven by plain JS objects (a <code>sankey()</code>, a <code>chord()</code>, and one <code>ridgeline()</code> function drawing both real state distributions) — no D3 or chart library, so it drops into the existing template system the same way the I3 waterfall and score-history charts already do. The Sankey and ridgeline reuse the site's own topic accents (rural/Population green, urban/Employment ochre); the chord remains the one section running on illustrative numbers, and still introduces its own 11-colour set — one saturated hue per node, sources and hubs alike — matching the bold, fully-coloured look of the reference chords you shared, rather than the site's muted 6-colour topic palette.</p>
+    <p>Two of these three are ready to wire into the live dataset as-is: the migration Sankey (54/20/18/8, checked live) and the poverty/literacy ridgeline (28 and 33 real state values, checked live). The chord is the one still waiting — it needs a real state-to-state migration corridor matrix, which Census D-series has at a coarser resolution than shown here, and isn't in the indicator catalog yet. Once you tell me where that matrix should come from, the chord can ship with real numbers too; until then it stays labelled "illustrative."</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function svgRoot(w, h){
+    const s = el('svg', { viewBox: `0 0 ${w} ${h}`, width: w, height: h });
+    return s;
+  }
+  function cssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  /* ---------------- 1. SANKEY ---------------- */
+  function drawSankey(){
+    const W = 620, H = 250;
+    const svg = svgRoot(W, H);
+    const rural = cssVar('--rural'), urban = cssVar('--urban');
+    const streams = [
+      { from: 'Rural', to: 'Rural', pct: 54, color: rural },
+      { from: 'Rural', to: 'Urban', pct: 20, color: rural },
+      { from: 'Urban', to: 'Urban', pct: 18, color: urban },
+      { from: 'Urban', to: 'Rural', pct: 8, color: urban }
+    ];
+    const total = streams.reduce((a,s)=>a+s.pct,0);
+    const colX0 = 96, colX1 = W - 96;
+    const top = 34, bottom = H - 40, usable = bottom - top;
+    const gap = 10;
+
+    // left node totals
+    const leftTotals = { Rural: 0, Urban: 0 };
+    streams.forEach(s => leftTotals[s.from] += s.pct);
+    const rightTotals = { Rural: 0, Urban: 0 };
+    streams.forEach(s => rightTotals[s.to] += s.pct);
+
+    function layout(totals){
+      let y = top;
+      const pos = {};
+      ['Rural','Urban'].forEach(k=>{
+        const h = (totals[k]/total) * (usable - gap);
+        pos[k] = { y0: y, y1: y + h, h };
+        y += h + gap;
+      });
+      return pos;
+    }
+    const leftPos = layout(leftTotals);
+    const rightPos = layout(rightTotals);
+
+    // draw flows as ribbons, tracking cursor per node
+    const leftCursor = { Rural: leftPos.Rural.y0, Urban: leftPos.Urban.y0 };
+    const rightCursor = { Rural: rightPos.Rural.y0, Urban: rightPos.Urban.y0 };
+    streams.forEach(s => {
+      const thick = (s.pct/total) * (usable - gap);
+      const y0a = leftCursor[s.from], y0b = y0a + thick;
+      leftCursor[s.from] = y0b;
+      const y1a = rightCursor[s.to], y1b = y1a + thick;
+      rightCursor[s.to] = y1b;
+      const mx = (colX0 + colX1) / 2;
+      const d = `M${colX0},${y0a} C${mx},${y0a} ${mx},${y1a} ${colX1},${y1a}
+                 L${colX1},${y1b} C${mx},${y1b} ${mx},${y0b} ${colX0},${y0b} Z`;
+      el('path', { d, fill: s.color, 'fill-opacity': s.from === s.to ? 0.5 : 0.32, stroke: 'none' }, svg);
+    });
+
+    // nodes + labels
+    function drawCol(pos, x, align, colorFor){
+      Object.keys(pos).forEach(k=>{
+        const p = pos[k];
+        el('rect', { x: x-4, y: p.y0, width: 8, height: p.h, fill: colorFor(k), rx: 1.5 }, svg);
+        const t = el('text', { x: align==='left'? x-16 : x+16, y: (p.y0+p.y1)/2 - 3,
+          'text-anchor': align==='left'?'end':'start', class:'lbl-strong' }, svg);
+        t.textContent = k;
+        const t2 = el('text', { x: align==='left'? x-16 : x+16, y: (p.y0+p.y1)/2 + 12,
+          'text-anchor': align==='left'?'end':'start', class:'lbl num' }, svg);
+        t2.textContent = Math.round((k==='Rural'? (align==='left'?leftTotals.Rural:rightTotals.Rural) : (align==='left'?leftTotals.Urban:rightTotals.Urban))) + '%';
+      });
+    }
+    drawCol(leftPos, colX0, 'left', k => k==='Rural'?rural:urban);
+    drawCol(rightPos, colX1, 'right', k => k==='Rural'?rural:urban);
+
+    // column captions
+    const c1 = el('text', { x: colX0, y: 16, 'text-anchor':'middle', class:'mono-tag' }, svg);
+    c1.setAttribute('style','font-size:9.5px; fill:'+cssVar('--faint')+'; letter-spacing:0.08em; text-transform:uppercase;');
+    c1.textContent = 'Origin';
+    const c2 = el('text', { x: colX1, y: 16, 'text-anchor':'middle', class:'mono-tag' }, svg);
+    c2.setAttribute('style','font-size:9.5px; fill:'+cssVar('--faint')+'; letter-spacing:0.08em; text-transform:uppercase;');
+    c2.textContent = 'Destination';
+
+    document.getElementById('sankeySvg').appendChild(svg);
+  }
+
+  /* ---------------- 2. CHORD ---------------- */
+  function drawChord(){
+    const W = 480, H = 480;
+    const svg = svgRoot(W, H);
+    const cx = W/2, cy = H/2 - 6, R = 178;
+
+    const hubs = ['Delhi','Maharashtra','Gujarat'];
+    const sources = ['Uttar Pradesh','Bihar','Rajasthan','Madhya Pradesh','Odisha','West Bengal','Jharkhand','Chhattisgarh'];
+    const nodes = hubs.concat(sources);
+    // every node gets its own saturated colour — sources AND hubs — matching the reference chords,
+    // where the receiving nodes (WBR, EBR-S...) are just as strongly coloured as the feeders.
+    const sourceColor = {
+      'Delhi': cssVar('--c9'), 'Maharashtra': cssVar('--c10'), 'Gujarat': cssVar('--c11'),
+      'Uttar Pradesh': cssVar('--c1'), 'Bihar': cssVar('--c2'), 'Rajasthan': cssVar('--c3'),
+      'Madhya Pradesh': cssVar('--c4'), 'Odisha': cssVar('--c5'), 'West Bengal': cssVar('--c6'),
+      'Jharkhand': cssVar('--c7'), 'Chhattisgarh': cssVar('--c8')
+    };
+    const links = [
+      ['Uttar Pradesh','Delhi',100], ['Uttar Pradesh','Maharashtra',40],
+      ['Bihar','Delhi',85], ['Bihar','Maharashtra',30],
+      ['Rajasthan','Gujarat',70], ['Rajasthan','Delhi',25],
+      ['Madhya Pradesh','Maharashtra',55], ['Madhya Pradesh','Gujarat',20],
+      ['Odisha','Gujarat',35],
+      ['West Bengal','Delhi',45],
+      ['Jharkhand','Delhi',30],
+      ['Chhattisgarh','Maharashtra',25]
+    ];
+    const totals = {};
+    nodes.forEach(n=>totals[n]=0);
+    links.forEach(([a,b,v])=>{ totals[a]+=v; totals[b]+=v; });
+    const grand = nodes.reduce((s,n)=>s+totals[n],0);
+    const gapDeg = 2.2;
+    const usableDeg = 360 - gapDeg*nodes.length;
+
+    let ang = -90;
+    const arc = {};
+    nodes.forEach(n=>{
+      const span = (totals[n]/grand) * usableDeg;
+      arc[n] = { a0: ang, a1: ang+span, mid: ang+span/2 };
+      ang += span + gapDeg;
+    });
+
+    function pt(deg, r){
+      const rad = deg*Math.PI/180;
+      return [cx + r*Math.cos(rad), cy + r*Math.sin(rad)];
+    }
+    // draw node arcs — solid, fully opaque, same treatment for sources and hubs
+    nodes.forEach(n=>{
+      const a = arc[n];
+      const [x0,y0] = pt(a.a0, R), [x1,y1] = pt(a.a1, R);
+      const large = (a.a1-a.a0) > 180 ? 1 : 0;
+      const d = `M${x0},${y0} A${R},${R} 0 ${large} 1 ${x1},${y1}`;
+      el('path', { d, fill:'none', stroke: sourceColor[n], 'stroke-width': 11, 'stroke-linecap':'butt' }, svg);
+    });
+
+    // running cursor per node for ribbon anchor points (inner radius)
+    const cursor = {};
+    nodes.forEach(n=>cursor[n]=arc[n].a0);
+    const innerR = R - 13;
+
+    links.forEach(([a,b,v])=>{
+      const spanA = (v/totals[a]) * (arc[a].a1-arc[a].a0);
+      const spanB = (v/totals[b]) * (arc[b].a1-arc[b].a0);
+      const a0 = cursor[a], a1 = a0+spanA; cursor[a]=a1;
+      const b0 = cursor[b], b1 = b0+spanB; cursor[b]=b1;
+      const [xa0,ya0] = pt(a0, innerR), [xa1,ya1] = pt(a1, innerR);
+      const [xb0,yb0] = pt(b0, innerR), [xb1,yb1] = pt(b1, innerR);
+      const d = `M${xa0},${ya0} A${innerR},${innerR} 0 0 1 ${xa1},${ya1}
+                 Q${cx},${cy} ${xb0},${yb0}
+                 A${innerR},${innerR} 0 0 1 ${xb1},${yb1}
+                 Q${cx},${cy} ${xa0},${ya0} Z`;
+      // ribbons take the source state's colour at a bold, saturated opacity —
+      // vivid like the reference chords, not a pastel wash
+      el('path', { d, fill: sourceColor[a], 'fill-opacity': 0.72, stroke: sourceColor[a], 'stroke-opacity':0.9, 'stroke-width':0.75 }, svg);
+    });
+
+    // labels
+    nodes.forEach(n=>{
+      const a = arc[n];
+      const [lx,ly] = pt(a.mid, R+16);
+      const t = el('text', { x:lx, y:ly, 'text-anchor': (a.mid> -90 && a.mid<90) ? 'start':'end', class:'lbl',
+        transform:`rotate(${a.mid>90||a.mid<-90? a.mid+180 : a.mid}, ${lx}, ${ly})` }, svg);
+      t.setAttribute('style','font-size:10.5px; fill:'+cssVar('--ink')+'; font-weight:'+(hubs.includes(n)?'600':'500')+';');
+      t.textContent = n;
+    });
+
+    document.getElementById('chordSvg').appendChild(svg);
+
+    // legend: every node, in the same colour as its arc
+    const legend = document.getElementById('chordLegend');
+    nodes.forEach(n=>{
+      const item = document.createElement('span');
+      item.className = 'item' + (hubs.includes(n) ? ' hub' : '');
+      item.innerHTML = `<span class="sw" style="background:${sourceColor[n]}"></span>${n}${hubs.includes(n) ? ' (hub)' : ''}`;
+      legend.appendChild(item);
+    });
+  }
+
+  /* ---------------- 3. RIDGELINE — real per-state values, one row per indicator ---------------- */
+  function drawRidge(cfg){
+    const W = cfg.W || 640, H = cfg.H || 260;
+    const svg = svgRoot(W, H);
+    const { rows, xMin, xMax, xTicks, unit, targetId } = cfg;
+
+    const left = 190, right = W - 30, top = 30;
+    const rowH = 92, baseGap = 8;
+    function xScale(v){ return left + (v - xMin) / (xMax - xMin) * (right - left); }
+
+    const grid = [];
+    for (let g=0; g<=140; g++) grid.push(xMin + (xMax-xMin)*g/140);
+
+    rows.forEach((row, ri) => {
+      const vals = row.values;
+      const bw = (xMax-xMin) * 0.05;
+      const dens = grid.map(g=>{
+        let sum = 0;
+        vals.forEach(v=>{ const z=(g-v)/bw; sum += Math.exp(-0.5*z*z); });
+        return sum;
+      });
+      const maxD = Math.max(...dens);
+      const rowBase = top + rowH*(ri+1) - baseGap;
+      const pts = grid.map((g,i)=>[xScale(g), rowBase - (dens[i]/maxD) * (rowH-30)]);
+
+      let d = `M${left},${rowBase} L${pts[0][0]},${pts[0][1]} `;
+      for (let i=0;i<pts.length-1;i++){
+        const [x0,y0] = pts[i], [x1,y1] = pts[i+1];
+        const mx = (x0+x1)/2;
+        d += `Q${x0},${y0} ${mx},${(y0+y1)/2} `;
+      }
+      d += `L${pts[pts.length-1][0]},${pts[pts.length-1][1]} L${right},${rowBase} Z`;
+
+      el('line', { x1:left, y1:rowBase, x2:right, y2:rowBase, class:'axis-line' }, svg);
+      el('path', { d, fill: row.color, 'fill-opacity':0.85, stroke: cssVar('--ink'), 'stroke-opacity':0.18, 'stroke-width':1 }, svg);
+
+      // real min/max/median markers as small ticks along the baseline
+      const sorted = [...vals].sort((a,b)=>a-b);
+      const median = sorted[Math.floor(sorted.length/2)];
+      [Math.min(...vals), median, Math.max(...vals)].forEach(v=>{
+        const x = xScale(v);
+        el('line', { x1:x, y1:rowBase+2, x2:x, y2:rowBase+7, stroke: cssVar('--faint'), 'stroke-width':1 }, svg);
+      });
+
+      const t = el('text', { x: left-14, y: rowBase - rowH*0.5, 'text-anchor':'end', class:'lbl-strong' }, svg);
+      t.setAttribute('style','font-size:12px;');
+      t.textContent = row.label;
+      const sub = el('text', { x: left-14, y: rowBase - rowH*0.5 + 15, 'text-anchor':'end', class:'lbl num' }, svg);
+      sub.setAttribute('style','font-size:10.5px;');
+      sub.textContent = row.n + ' states · median ' + median.toFixed(1) + unit;
+    });
+
+    const axisY = top + rowH*rows.length + 8;
+    el('line', { x1:left, y1:axisY, x2:right, y2:axisY, class:'axis-line' }, svg);
+    xTicks.forEach(v=>{
+      const x = xScale(v);
+      el('line', { x1:x, y1:axisY, x2:x, y2:axisY+4, class:'axis-line' }, svg);
+      const t = el('text', { x, y: axisY+16, 'text-anchor':'middle', class:'tick' }, svg);
+      t.textContent = v+unit;
+    });
+
+    document.getElementById(targetId).appendChild(svg);
+  }
+
+  function drawAllRidges(){
+    drawRidge({
+      targetId:'ridgeSvg', unit:'%', W:660, H:250,
+      xMin:0, xMax:100, xTicks:[0,25,50,75,100],
+      rows: [
+        {
+          label:'Multidimensional poverty by state', n:28, color: cssVar('--urban'),
+          values:[33.76,28.81,27.79,22.93,20.63,19.35,16.37,15.68,15.43,15.31,13.76,13.11,11.89,11.66,9.67,8.10,7.81,7.58,7.07,5.88,6.06,4.97,4.80,4.75,2.60,2.20,0.84,0.55]
+        },
+        {
+          label:'Literacy rate by state', n:33, color: cssVar('--rural'),
+          values:[94.0,91.8,91.3,88.7,87.2,86.6,86.2,86.0,85.8,82.8,82.3,81.4,80.1,79.6,79.2,78.8,78.0,76.3,75.8,75.6,75.4,74.4,72.9,72.2,70.3,69.3,67.7,67.2,67.0,66.4,66.1,65.4,61.8]
+        }
+      ]
+    });
+  }
+
+  /* ---------------- MAPPING TABLE ---------------- */
+  function drawMap(){
+    // status: 'ready' (checked live, fits), 'no-fit' (checked live, doesn't fit as hoped), 'unverified' (not checked yet — not claimed)
+    const rows = [
+      { name:'Internal migration streams', key:'migration', topic:'Population & demography', chart:'sankey', why:'Origin → destination breakdown, 4 real numbers (54/20/18/8) — checked live.', status:'ready' },
+      { name:'Multidimensional poverty by state', key:'povertyStates', topic:'Poverty & incomes', chart:'ridge', why:'28 real state values, NFHS-5 — checked live. One year only, so this is a distribution snapshot, not a trend.', status:'ready' },
+      { name:'Literacy rate by state', key:'literacyStates', topic:'Education & literacy', chart:'ridge', why:'33 real state/UT values, Census 2011 — checked live. Also one year only.', status:'ready' },
+      { name:'Labour force participation — small multiples', key:'lfprPanels', topic:'Employment & labour', chart:'ridge', why:'Checked live: this is 4 national metrics (rural/urban women, all persons, unemployment), not 20 states. A ridgeline needs a state axis this indicator doesn’t have.', status:'no-fit' },
+      { name:'Literacy rate by sex', key:'literacy', topic:'Education & literacy', chart:'ridge', why:'Checked live: national male/female line chart, 1951–2011 — no state breakdown on the Chart tab. (The state version is the separate literacyStates indicator, above.)', status:'no-fit' },
+      { name:'Poverty headcount ratio', key:'povertyLines', topic:'Poverty & incomes', chart:'ridge', why:'Checked live: a national slope chart across 3 poverty lines. The page states plainly “income poverty is not separately published by state in this series.”', status:'no-fit' },
+      { name:'Household consumption expenditure (MPCE)', key:'mpce', topic:'Poverty & incomes', chart:'ridge', why:'Checked live: 4 national numbers (rural/urban × 2 survey years), not state-level.', status:'no-fit' },
+      { name:'Sex ratio at birth', key:'sexRatioBirth', topic:'Gender', chart:'ridge', why:'Checked live: a national line chart across SRS rounds, not a state breakdown.', status:'no-fit' },
+      { name:'Age composition of the population', key:'ageComposition', topic:'Population & demography', chart:'sankey', why:'Checked live: two independent snapshots (1971, 2021), not tracked cohort flows — a literal Sankey would imply a specific person-by-person link the data doesn’t contain. Better served by its current side-by-side composition view.', status:'no-fit' },
+      { name:'Literacy gender gap by state', key:'literacyGap', topic:'Education & literacy', chart:'sankey', why:'Checked live: 11 states, male vs female literacy — real state data, but it’s a paired comparison (already a slope chart), not origin→destination flow. Not a natural Sankey.', status:'no-fit' },
+      { name:'FDI equity inflows by sector', key:'fdiSectors', topic:'Economy & finance', chart:'sankey', why:'Not checked against the live Chart tab yet — no claim made either way.', status:'unverified' },
+      { name:'Merchandise exports and imports', key:'tradeBalance', topic:'Economy & finance', chart:'chord', why:'Not checked against the live Chart tab yet — no claim made either way.', status:'unverified' },
+      { name:'Future population by age group', key:'futurePopulationByAge', topic:'Population & demography', chart:'ridge', why:'Not checked against the live Chart tab yet — no claim made either way.', status:'unverified' }
+    ];
+    const chartLabel = { sankey:'Sankey', chord:'Chord', ridge:'Ridgeline' };
+    const chipClass = { sankey:'sankey', chord:'chord', ridge:'ridge' };
+    const statusLabel = { ready:'Ready — verified live', 'no-fit':'Checked — doesn’t fit', unverified:'Not checked yet' };
+    const statusClass = { ready:'ready', 'no-fit':'', unverified:'' };
+    const tbody = document.getElementById('mapRows');
+    rows.forEach(r=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="ind">${r.name}<span class="topic">${r.topic} · <code>${r.key}</code></span></td>
+        <td><span class="chip ${chipClass[r.chart]}">${chartLabel[r.chart]}</span></td>
+        <td>${r.why}</td>
+        <td><span class="status ${statusClass[r.status]}">${statusLabel[r.status]}</span></td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  drawSankey();
+  drawChord();
+  drawAllRidges();
+  drawMap();
+})();
+</script>
